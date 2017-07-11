@@ -13,14 +13,15 @@ public class ChatServer implements Runnable {
 	public static int port = 9999;
 	static ServerSocket server;
 	static Vector<ChatServer> connections;
-
+	static Vector<String> nicknames;
+	
 	private Socket client;
 	private Scanner in;
 	private PrintWriter out;
-	private String name;
 	
 	public static void main(String[] args) {
 		connections = new Vector<ChatServer>();
+		nicknames = new Vector<String>();
 		
 		try {
 			server = new ServerSocket(port);
@@ -46,8 +47,8 @@ public class ChatServer implements Runnable {
 	
 	public ChatServer(Socket client) {
 		this.client = client;
-		name = "Server";
 		connections.addElement(this);
+		nicknames.addElement("Client name - John Doe");
 		
 		try {
 			in = new Scanner(new InputStreamReader(client.getInputStream()));
@@ -55,6 +56,8 @@ public class ChatServer implements Runnable {
 		} catch (IOException e) {
 			System.out.println("Can't initialize Input/Output for Client!");
 		}
+		
+		
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class ChatServer implements Runnable {
 	}
 	
 	public void sendMsg(String msg) {
-		out.println(name + ": " + msg);
+		out.println(nicknames.get(nicknames.size() - 1) + ": " + msg);
 	}
 
 }
