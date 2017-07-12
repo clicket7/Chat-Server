@@ -13,15 +13,14 @@ public class ChatServer implements Runnable {
 	public static int port = 9999;
 	static ServerSocket server;
 	static Vector<ChatServer> connections;
-	static String nickname;
 	
 	private Socket client;
 	private Scanner in;
 	private PrintWriter out;
+	String nickname;
 	
 	public static void main(String[] args) {
 		connections = new Vector<ChatServer>();
-		nickname = "";
 		
 		try {
 			server = new ServerSocket(port);
@@ -70,7 +69,7 @@ public class ChatServer implements Runnable {
 			String msg;
 			while (in.hasNext()) {
 				msg = in.nextLine().toString();
-				for (ChatServer server : connections) server.sendMsg(msg);
+				for (ChatServer server : connections) server.sendMsg(nickname, msg);
 				if (msg.equals("quit") || msg.equals("exit")) break;
 			}
 			break;
@@ -85,7 +84,7 @@ public class ChatServer implements Runnable {
 		}
 	}
 	
-	public void sendMsg(String msg) {
+	public void sendMsg(String nickname, String msg) {
 		out.println(nickname + ": " + msg);
 	}
 
