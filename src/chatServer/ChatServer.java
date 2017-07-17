@@ -52,7 +52,7 @@ public class ChatServer implements Runnable {
 			in = new Scanner(new InputStreamReader(client.getInputStream()));
 			out = new PrintWriter(client.getOutputStream(), true);
 	//		out.println("Write your name:");
-			nickname = "User";
+			nickname = "";
 	//		for (ChatServer c:connections) {
 	//			c.out.println("User is online");
 	//		}
@@ -83,7 +83,7 @@ public class ChatServer implements Runnable {
 	}
 	
 	public void sendMsg(String nickname, String msg) {
-		out.println(msg);
+		out.println(nickname + msg);
 	}
 
 }
