@@ -51,11 +51,11 @@ public class ChatServer implements Runnable {
 		try {
 			in = new Scanner(new InputStreamReader(client.getInputStream()));
 			out = new PrintWriter(client.getOutputStream(), true);
-			out.println("Write your name:");
-			nickname = in.nextLine().toString();
-			for (ChatServer c:connections) {
-				c.out.println(nickname + " is online");
-			}
+	//		out.println("Write your name:");
+			nickname = "User";
+	//		for (ChatServer c:connections) {
+	//			c.out.println("User is online");
+	//		}
 		} catch (IOException e) {
 			System.out.println("Can't initialize Input/Output for Client!");
 		}
@@ -83,7 +83,7 @@ public class ChatServer implements Runnable {
 	}
 	
 	public void sendMsg(String nickname, String msg) {
-		out.println(nickname + ": " + msg);
+		out.println(msg);
 	}
 
 }
