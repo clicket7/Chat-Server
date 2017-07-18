@@ -17,7 +17,7 @@ public class ChatServer implements Runnable {
 	private Socket client;
 	private Scanner in;
 	private PrintWriter out;
-	String nickname;
+	String userFrom, userTo;
 	
 	public static void main(String[] args) {
 		connections = new Vector<ChatServer>();
@@ -46,16 +46,17 @@ public class ChatServer implements Runnable {
 	
 	public ChatServer(Socket client) {
 		this.client = client;
-		connections.addElement(this);
 		
 		try {
 			in = new Scanner(new InputStreamReader(client.getInputStream()));
 			out = new PrintWriter(client.getOutputStream(), true);
-	//		out.println("Write your name:");
-			nickname = "";
-	//		for (ChatServer c:connections) {
-	//			c.out.println("User is online");
-	//		}
+			try {
+				userFrom = in.nextLine().toString();
+				userTo = in.nextLine().toString();
+			} catch (Exception e) {
+				System.out.println("Mistake");
+			}
+			connections.addElement(this);
 		} catch (IOException e) {
 			System.out.println("Can't initialize Input/Output for Client!");
 		}
@@ -67,8 +68,12 @@ public class ChatServer implements Runnable {
 			String msg;
 			while (in.hasNext()) {
 				msg = in.nextLine().toString();
-				for (ChatServer server : connections) server.sendMsg(nickname, msg);
 				if (msg.equals("quit") || msg.equals("exit")) break;
+				for (ChatServer server : connections) {
+					if (server.userFrom.equals(userTo) && server.userTo.equals(userFrom)) {
+							server.sendMsg(msg);
+					}
+				}
 			}
 			break;
 		}
@@ -82,8 +87,8 @@ public class ChatServer implements Runnable {
 		}
 	}
 	
-	public void sendMsg(String nickname, String msg) {
-		out.println(nickname + msg);
+	public void sendMsg(String msg) {
+		out.println(msg);
 	}
 
 }
